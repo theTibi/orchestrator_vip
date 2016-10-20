@@ -63,9 +63,9 @@ fi
 shift $(( OPTIND - 1 ));
 
 # discover commands from our path
-ssh=$(type -p ssh)
-arping=$(type -p arping)
-ip2util=$(type -p ip)
+ssh=$(which ssh)
+arping=$(which arping)
+ip2util=$(which ip)
 
 # command for adding our vip
 cmd_vip_add="sudo -n $ip2util address add ${vip} dev ${interface}"
