@@ -99,6 +99,7 @@ vip_start() {
 }
 
 vip_status() {
+    sudo -n $arping -c 1 ${vip%/*}
     if ping -c 1 -W 1 "$vip"; then
         return 0
     else
@@ -127,7 +128,7 @@ if [[ $isitdead == 0 ]]; then
 
 elif [[ $isitdead == 1 ]]; then
     echo "Master is dead, failover"
-    # make sure the vip is not abailable 
+    # make sure the vip is not available 
     if vip_status; then 
         if vip_stop; then
             if [ $sendmail -eq 1 ]; then mail -s "$vip is removed from orig_master." "$emailaddress" < /dev/null &> /dev/null  ; fi
@@ -137,15 +138,15 @@ elif [[ $isitdead == 1 ]]; then
         fi
     fi
 
-        if vip_start; then
-            echo "$vip is moved to $new_master."
-            if [ $sendmail -eq 1 ]; then mail -s "$vip is moved to $new_master." "$emailaddress" < /dev/null &> /dev/null  ; fi
+    if vip_start; then
+          echo "$vip is moved to $new_master."
+          if [ $sendmail -eq 1 ]; then mail -s "$vip is moved to $new_master." "$emailaddress" < /dev/null &> /dev/null  ; fi
 
-        else
-            echo "Can't add $vip on $new_master!" 
-            if [ $sendmail -eq 1 ]; then mail -s "Can't add $vip on $new_master!" "$emailaddress" < /dev/null &> /dev/null  ; fi
-            exit 1
-        fi
+    else
+          echo "Can't add $vip on $new_master!" 
+          if [ $sendmail -eq 1 ]; then mail -s "Can't add $vip on $new_master!" "$emailaddress" < /dev/null &> /dev/null  ; fi
+          exit 1
+    fi
 else
     echo "Wrong argument, the master is dead or live?"
 
