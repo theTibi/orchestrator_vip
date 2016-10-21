@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 isitdead=$1
 cluster=$2
 oldmaster=$3
@@ -8,13 +7,8 @@ newmaster=$4
 
 logfile="/var/log/orch_hook.log"
 
-# list of clusternames
-clusternames=(rep blea lajos)
-
 # clustername=( interface IP user)
 rep=( eth0 "192.168.56.121" orchuser )
-#prod1=( eth1 "10.20.10.5" vipuser )
-
 
 if [[ $isitdead == "DeadMaster" ]]; then
 
