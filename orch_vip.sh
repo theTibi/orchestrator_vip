@@ -99,7 +99,7 @@ vip_start() {
 }
 
 vip_status() {
-    sudo -n $arping -c 1 ${vip%/*}
+    $arping -c 1 ${vip%/*}
     if ping -c 1 -W 1 "$vip"; then
         return 0
     else
