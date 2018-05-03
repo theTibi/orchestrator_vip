@@ -75,6 +75,8 @@ cmd_vip_del="sudo -n $ip2util address del ${vip}/32 dev ${interface}"
 cmd_vip_chk="sudo -n $ip2util address show dev ${interface} to ${vip%/*}/32"
 # command for sending gratuitous arp to announce ip move
 cmd_arp_fix="sudo -n $arping -c 1 -I ${interface} ${vip%/*}"
+# command for sending gratuitous arp to announce ip move on current server
+cmd_local_arp_fix="sudo -n $arping -c 1 ${vip%/*}"
 
 vip_stop() {
     rc=0
@@ -95,6 +97,7 @@ vip_start() {
     $ssh ${ssh_options} -tt ${ssh_user}@${new_master} \
      "[ -z \"\$(${cmd_vip_chk})\" ] && ${cmd_vip_add} && ${cmd_arp_fix} || [ -n \"\$(${cmd_vip_chk})\" ]"
     rc=$?
+    $cmd_local_arp_fix
     return $rc
 }
 
